@@ -1,5 +1,5 @@
-
-
+this line add by remote machine
+i am second line 
 1)How many startups are there in Pune City?
   select *
   from combinefile 
