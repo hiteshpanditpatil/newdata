@@ -1,0 +1,56 @@
+
+
+1)How many startups are there in Pune City?
+  select *
+  from combinefile 
+  where city= "pune";
+  
+ 
+
+2:-How many startups in Pune got their Seed/ Angel Funding?
+
+ SELECT * 
+ FROM combinefile
+  WHERE City = 'Pune'   AND 
+  InvestmentnType IN ('Seed Angel Funding', 'Seed Funding');
+  
+  #OR
+SELECT SUM(COALESCE(Amount_in_USD, 0)) AS total_amount_raised
+FROM combinefile 
+WHERE city = 'Pune';
+#OR
+SELECT SUM(Amount_in_USD) AS total_amount_raised
+FROM combinefile 
+WHERE city = 'Pune'
+AND amount_raised IS NOT NULL;
+  
+  
+3:What is the total amount raised by startups in Pune City? Hint - use regex_replace to get rid of null
+
+SELECT SUM(CAST(REGEXP_REPLACE(Amount_in_USD, '[^0-9]', '') AS DECIMAL(20,2))) AS TotalAmountRaised
+FROM combinefile
+WHERE City = 'Pune';
+
+
+4:What are the top 5 Industry_Vertical which has the highest number of startups in India?
+
+SELECT Industry_Vertical, COUNT(*) AS Number_of_Startups
+FROM combinefile
+where country='india'
+GROUP BY Industry_Vertical 
+ORDER BY Number_of_Startups DESC
+LIMIT 5;
+ 
+5:Find the top Investor(by amount) of each year.
+
+ WITH InvestorCounts AS (
+    SELECT Investors_Name, COUNT(*) AS Number_of_Investments
+    FROM combinefile
+    GROUP BY Investors_Name
+)
+
+-- Main query to get the top 5 investors
+SELECT Investors_Name, Number_of_Investments
+FROM InvestorCounts
+ORDER BY Number_of_Investments DESC
+LIMIT 5;
